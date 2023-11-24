@@ -21,15 +21,16 @@ public class MainActivity extends AppCompatActivity {
         idView = (TextView) findViewById(R.id.productID);
         productBox = (EditText) findViewById(R.id.productName);
         skuBox = (EditText) findViewById(R.id.productSku);
+        dbHandler = new MyDBHandler(this);
     }
 
     public void newProduct (View view) {
 
         int sku = Integer.parseInt(skuBox.getText().toString());
 
-        Product product = new Product(productBox.getText().toString(), sku);
+        Product product= new Product(productBox.getText().toString(), sku);
 
-        // TODO: add to database
+        dbHandler.addProduct(product);
 
         productBox.setText("");
 
@@ -40,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void lookupProduct (View view) {
 
-        // TODO: get from Database
-        Product product = null;
+        String productName=productBox.getText().toString();
+        Product product=dbHandler.findProduct(productName);
 
         if (product != null) {
             idView.setText(String.valueOf(product.getID()));
@@ -54,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void removeProduct (View view) {
 
-        // TODO: remove from database
-        boolean result = false;
+        String productName=productBox.getText().toString();
+        boolean result=dbHandler.deleteProduct(productName);
 
         if (result) {
             idView.setText("Record Deleted");
